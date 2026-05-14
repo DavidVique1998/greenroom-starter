@@ -47,8 +47,8 @@ const STEPS: Record<TourPage, { element: string; title: string; description: str
   "settle-rose": [
     {
       element: "[data-tour='integrity-banner']",
-      title: "Signal mismatch — Wax Paper",
-      description: "Signoff says \"ok wire monday\" — that's approval. Status still shows Disputed. This payment is blocked for no reason.",
+      title: "Signal mismatch — Sunday Drivers",
+      description: "Signoff says \"OK. Good night.\" — that's approval. Status still shows Disputed. This payment is blocked for no reason.",
     },
     {
       element: "[data-tour='banner-reason']",
@@ -59,8 +59,8 @@ const STEPS: Record<TourPage, { element: string; title: string; description: str
   "settle-amber": [
     {
       element: "[data-tour='integrity-banner']",
-      title: "Later-note conflict — Dust Off",
-      description: "TM signed off: \"Looks good — TM.\" But a note added Monday flags the production-overage line. Amber = verify which is current.",
+      title: "Later-note conflict — Briar Road",
+      description: "TM signed off: \"Looks good — TM. Wire to the usual account when ready.\" But a note added Monday flags the production-overage line. Amber = verify which is current.",
     },
     {
       element: "[data-tour='banner-reason']",
@@ -71,7 +71,7 @@ const STEPS: Record<TourPage, { element: string; title: string; description: str
   "settlements-resolved": [
     {
       element: "[data-tour='queue-header']",
-      title: "Wax Paper removed from queue",
+      title: "Sunday Drivers removed from queue",
       description: "Status is now finalized. Timestamp logged. Payment can proceed — no thread to re-read, no manual push required.",
     },
     {
