@@ -29,8 +29,8 @@ The downstream costs are real:
 - **Audit confusion.** A `disputed` status that reads as resolved in the signoff creates ambiguity for Marcus and Pri when they look at the numbers.
 
 <table><tr>
-<td width="75%"><img src="public/screenshots/01-shows-home.png" width="100%"/><br/><sub>Shows home — Mariana's default view. The Settlements nav item with badge is the new entry point.</sub></td>
-<td width="25%"><img src="public/screenshots/05-nav-badge.png" width="100%"/><br/><sub>Sidebar badge — queue depth visible at a glance, no navigation required.</sub></td>
+<td width="50%"><img src="public/screenshots/01-shows-home.png" style="width:100%;height:260px;object-fit:cover;object-position:top;"/><br/><sub>Shows home — Mariana's default view. The Settlements nav item with badge is the new entry point.</sub></td>
+<td width="50%"><img src="public/screenshots/05-nav-badge.png" style="width:100%;height:260px;object-fit:cover;object-position:top;"/><br/><sub>Sidebar badge — queue depth visible at a glance, no navigation required.</sub></td>
 </tr></table>
 
 ---
@@ -67,6 +67,8 @@ flowchart LR
     E & F --> I["inline banner\n/settle"]
     H & I -- "Mark Resolved" --> J["finalized\n+ revalidate"]
 ```
+
+Every disputed settlement passes through the signal classifier. If the signoff text scores positive, the system checks internal notes — clean notes produce a rose flag (clear mismatch, payment is blocked for no reason), conflicting notes produce an amber flag (signoff positive but a later note raised a question). Flagged settlements surface in two places: the `/settlements` audit queue with a nav badge showing queue depth, and an inline banner directly on the settlement page. Either surface lets Mariana mark the settlement resolved in one click, which advances status to `finalized`, logs a timestamp, and decrements the badge — no spreadsheet, no manual follow-up.
 
 ### 1. Signal Classifier (`lib/signalScore.ts`)
 
