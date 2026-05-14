@@ -7,13 +7,19 @@ import { formatMoney, formatShowDate } from "@/lib/format";
 import { resolveSettlement } from "./actions";
 import { TourOverlay } from "@/components/tour/TourOverlay";
 
-export default async function SettlementsPage() {
+export default async function SettlementsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ tour?: string }>;
+}) {
+  const sp = searchParams ? await searchParams : {};
+  const tourPage = sp?.tour === "resolved" ? "settlements-resolved" : "settlements";
   const flagged = await getFlaggedSettlements();
 
   return (
     <div className="px-12 py-10 max-w-4xl">
       <Suspense>
-        <TourOverlay page="settlements" />
+        <TourOverlay page={tourPage} />
       </Suspense>
       <div className="mb-10">
         <div className="flex items-center gap-2 mb-3">

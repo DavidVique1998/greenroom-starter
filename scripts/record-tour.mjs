@@ -107,24 +107,34 @@ await sleep(600);
 await waitForTour(page);
 await sleep(1500);
 
-// ─── 5. Back to queue — resolve one ──────────────────────────────────────────
-console.log("→ Mark Resolved");
-await page.goto(`${BASE_URL}/settlements`);
+// ─── 5. Back to queue — tour before resolve ──────────────────────────────────
+console.log("→ Settlements queue (tour: before resolve)");
+await page.goto(`${BASE_URL}/settlements?tour=1`);
 await page.waitForLoadState("networkidle");
-await sleep(2000);
+await sleep(1200);
+await smoothScroll(page, 300);
+await sleep(800);
 
+await waitForTour(page);
+await sleep(1200);
+
+// ─── 6. Click "Mark Resolved" ────────────────────────────────────────────────
+console.log("→ Mark Resolved");
 const firstResolveBtn = page.getByRole("button", { name: "Mark Resolved" }).first();
 await firstResolveBtn.scrollIntoViewIfNeeded();
-await sleep(1500);
+await sleep(1000);
 
 await firstResolveBtn.click();
 await page.waitForLoadState("networkidle");
-await sleep(2500);
-
-// Show updated badge + reduced queue
-await smoothScroll(page, 200);
 await sleep(1200);
-await smoothScroll(page, -200);
+
+// ─── 7. Post-resolve tour — card gone, badge decremented ─────────────────────
+console.log("→ Post-resolve tour (queue shrinks, badge decrements)");
+await page.goto(`${BASE_URL}/settlements?tour=resolved`);
+await page.waitForLoadState("networkidle");
+await sleep(1000);
+
+await waitForTour(page);
 await sleep(1500);
 
 // ─── Done ─────────────────────────────────────────────────────────────────────

@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 
-export type TourPage = "shows" | "settlements" | "settle-rose" | "settle-amber";
+export type TourPage = "shows" | "settlements" | "settle-rose" | "settle-amber" | "settlements-resolved";
 
 const STEP_DURATION = 3800;
 
@@ -66,6 +66,18 @@ const STEPS: Record<TourPage, { element: string; title: string; description: str
       element: "[data-tour='banner-reason']",
       title: "Needs manual verification",
       description: "System surfaces the conflict; Mariana makes the call. No automated action happens without her.",
+    },
+  ],
+  "settlements-resolved": [
+    {
+      element: "[data-tour='queue-header']",
+      title: "Settlement removed from queue",
+      description: "That settlement is now finalized. Status updated, timestamp logged — payment can proceed.",
+    },
+    {
+      element: "[data-tour='settlements-nav']",
+      title: "Badge decrements automatically",
+      description: "The count drops on every resolve. When the queue hits zero, the badge disappears entirely — Mariana sees it without navigating.",
     },
   ],
 };
