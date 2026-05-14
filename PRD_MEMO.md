@@ -28,9 +28,9 @@ The downstream costs are real:
 - **Cognitive overhead.** Mariana has to re-context-switch into a settlement she mentally closed weeks ago.
 - **Audit confusion.** A `disputed` status that reads as resolved in the signoff creates ambiguity for Marcus and Pri when they look at the numbers.
 
-<table width="100%"><tr>
-<td width="50%"><img src="public/screenshots/01-shows-home.png" style="width:100%;height:260px;object-fit:cover;object-position:top;"/><br/><sub>Shows home — Mariana's default view. The Settlements nav item with badge is the new entry point.</sub></td>
-<td width="50%"><img src="public/screenshots/05-nav-badge.png" style="width:100%;height:260px;object-fit:cover;object-position:top;"/><br/><sub>Sidebar badge — queue depth visible at a glance, no navigation required.</sub></td>
+<table style="width:100%;table-layout:fixed;"><tr>
+<td style="width:50%;padding-right:8px;vertical-align:top;"><img src="public/screenshots/01-shows-home.png" style="display:block;width:100%;height:260px;object-fit:cover;object-position:top;"/><br/><sub>Shows home — Mariana's default view. The Settlements nav item with badge is the new entry point.</sub></td>
+<td style="width:50%;padding-left:8px;vertical-align:top;"><img src="public/screenshots/05-nav-badge.png" style="display:block;width:100%;height:260px;object-fit:cover;object-position:top;"/><br/><sub>Sidebar badge — queue depth visible at a glance, no navigation required.</sub></td>
 </tr></table>
 
 ---
