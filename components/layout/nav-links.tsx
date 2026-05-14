@@ -26,6 +26,7 @@ export function NavLinks({ flaggedSettlements = 0 }: { flaggedSettlements?: numb
           <Link
             key={item.href}
             href={item.href}
+            data-tour={item.href === "/settlements" ? "settlements-nav" : undefined}
             className={cn(
               "flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-all duration-150",
               active
@@ -41,7 +42,10 @@ export function NavLinks({ flaggedSettlements = 0 }: { flaggedSettlements?: numb
             />
             <span className="flex-1">{item.label}</span>
             {showBadge && (
-              <span className="inline-flex items-center justify-center h-4 min-w-[16px] px-1 rounded-full bg-amber-500 text-white text-[10px] font-semibold leading-none">
+              <span
+                data-tour="nav-badge"
+                className="inline-flex items-center justify-center h-4 min-w-[16px] px-1 rounded-full bg-amber-500 text-white text-[10px] font-semibold leading-none"
+              >
                 {flaggedSettlements}
               </span>
             )}

@@ -1,15 +1,20 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { AlertTriangle, CheckCircle2, ArrowRight, Clock, FileCheck } from "lucide-react";
 import { getFlaggedSettlements, type FlaggedSettlement } from "@/lib/queries";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { formatMoney, formatShowDate } from "@/lib/format";
 import { resolveSettlement } from "./actions";
+import { TourOverlay } from "@/components/tour/TourOverlay";
 
 export default async function SettlementsPage() {
   const flagged = await getFlaggedSettlements();
 
   return (
     <div className="px-12 py-10 max-w-4xl">
+      <Suspense>
+        <TourOverlay page="settlements" />
+      </Suspense>
       <div className="mb-10">
         <div className="flex items-center gap-2 mb-3">
           <FileCheck className="h-5 w-5 text-ink-400" />
@@ -38,7 +43,7 @@ export default async function SettlementsPage() {
         </div>
       ) : (
         <>
-          <div className="flex items-center gap-2 mb-6">
+          <div data-tour="queue-header" className="flex items-center gap-2 mb-6">
             <AlertTriangle className="h-4 w-4 text-amber-600" />
             <span className="text-[13px] text-ink-600">
               {flagged.length} settlement{flagged.length === 1 ? "" : "s"}{" "}
@@ -91,13 +96,14 @@ function FlaggedCard({ item }: { item: FlaggedSettlement }) {
           <div className="eyebrow text-[10px] text-ink-500 mb-1.5">
             Artist team signoff
           </div>
-          <div className="text-[13px] text-ink-800 bg-canvas-soft rounded-lg px-4 py-3 ring-1 ring-ink-200/60 italic leading-relaxed">
+          <div data-tour="signoff-text" className="text-[13px] text-ink-800 bg-canvas-soft rounded-lg px-4 py-3 ring-1 ring-ink-200/60 italic leading-relaxed">
             &ldquo;{settlement.signoffText}&rdquo;
           </div>
         </div>
 
         {/* The flag reason */}
         <div
+          data-tour="flag-reason"
           className={`text-[12px] rounded-md px-3 py-2.5 leading-relaxed ring-1 ${
             hasNoteConflict
               ? "bg-amber-50 text-amber-900 ring-amber-200/60"
@@ -113,6 +119,7 @@ function FlaggedCard({ item }: { item: FlaggedSettlement }) {
             <input type="hidden" name="settlementId" value={settlement.id} />
             <input type="hidden" name="showId" value={show.id} />
             <button
+              data-tour="resolve-btn"
               type="submit"
               className="inline-flex items-center gap-1.5 rounded-md bg-ink-900 px-3.5 py-2 text-[12px] font-medium text-white hover:bg-ink-700 transition-colors"
             >

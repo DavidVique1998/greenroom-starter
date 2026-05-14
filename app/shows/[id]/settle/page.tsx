@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -32,6 +33,7 @@ import type { Settlement, Recoup } from "@/db/schema";
 import { detectMismatch } from "@/lib/signalScore";
 import { resolveSettlement } from "@/app/settlements/actions";
 import { Logomark } from "@/components/brand/logo";
+import { TourOverlay } from "@/components/tour/TourOverlay";
 
 const RECOUP_LABELS: Record<Recoup["category"], string> = {
   marketing: "Marketing",
@@ -44,10 +46,14 @@ const RECOUP_LABELS: Record<Recoup["category"], string> = {
 
 export default async function SettlePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams?: Promise<{ tour?: string }>;
 }) {
   const { id } = await params;
+  const sp = searchParams ? await searchParams : {};
+  const tourEnabled = !!sp?.tour;
   const data = await getShowById(id);
   if (!data) notFound();
 
@@ -84,8 +90,17 @@ export default async function SettlePage({
     ? detectMismatch(settlement.status, settlement.signoffText, settlement.notes)
     : null;
 
+  const tourPage: "settle-amber" | "settle-rose" = mismatch?.flagged && mismatch.reason.includes("later note")
+    ? "settle-amber"
+    : "settle-rose";
+
   return (
     <div className={`px-12 py-10 max-w-7xl ${isDisputed ? "bg-gradient-to-b from-rose-50/30 via-canvas to-canvas" : ""}`}>
+      {tourEnabled && (
+        <Suspense>
+          <TourOverlay page={tourPage} />
+        </Suspense>
+      )}
       <BackLink showId={show.id} />
 
       <div className="mb-20">
@@ -129,13 +144,13 @@ export default async function SettlePage({
       )}
 
       {mismatch?.flagged && settlement && (
-        <div className="mb-6 rounded-lg border border-amber-200/60 bg-amber-50/50 p-5 flex gap-3">
+        <div data-tour="integrity-banner" className="mb-6 rounded-lg border border-amber-200/60 bg-amber-50/50 p-5 flex gap-3">
           <Sparkles className="h-4 w-4 text-amber-700 mt-0.5 shrink-0" />
           <div className="flex-1 min-w-0">
             <div className="text-[13px] font-semibold text-amber-900 mb-1">
               Signal mismatch detected
             </div>
-            <p className="text-[12.5px] text-ink-600 leading-relaxed">
+            <p data-tour="banner-reason" className="text-[12.5px] text-ink-600 leading-relaxed">
               {mismatch.reason}
             </p>
             <div className="mt-3 flex items-center gap-3">

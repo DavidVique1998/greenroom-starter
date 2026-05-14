@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getAllShows } from "@/lib/queries";
 import {
   formatMoneyCompact,
@@ -7,8 +8,15 @@ import {
 } from "@/lib/format";
 import { ShowsList } from "./shows-list";
 import type { ShowRow } from "./shows-list";
+import { TourOverlay } from "@/components/tour/TourOverlay";
 
-export default async function ShowsPage() {
+export default async function ShowsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ tour?: string }>;
+}) {
+  const sp = searchParams ? await searchParams : {};
+  const tourEnabled = !!sp?.tour;
   const rows = await getAllShows();
 
   const reversed = [...rows].reverse();
@@ -58,6 +66,11 @@ export default async function ShowsPage() {
 
   return (
     <div className="px-12 py-10 max-w-7xl">
+      {tourEnabled && (
+        <Suspense>
+          <TourOverlay page="shows" />
+        </Suspense>
+      )}
       <div className="mb-14">
         <div className="eyebrow mb-3">
           The Crescent · Nashville · 650 cap

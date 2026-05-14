@@ -1,6 +1,6 @@
 /**
  * Greenroom — Settlement Signal Integrity tour recorder
- * Generates a .webm video of the full feature walkthrough.
+ * Generates a .webm video with Driver.js guided annotations.
  *
  * Usage:
  *   node scripts/record-tour.mjs
@@ -16,6 +16,7 @@ import { mkdirSync } from "fs";
 
 const BASE_URL = "http://localhost:3000";
 const OUTPUT_DIR = "./recordings";
+const TOUR_TIMEOUT = 30_000; // 30s per tour page
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -25,6 +26,13 @@ async function smoothScroll(page, distance, steps = 8) {
     await page.mouse.wheel(0, step);
     await sleep(120);
   }
+}
+
+async function waitForTour(page) {
+  await page.waitForFunction(() => window.__tourDone === true, {
+    timeout: TOUR_TIMEOUT,
+  });
+  await sleep(600); // brief pause after tour finishes
 }
 
 mkdirSync(OUTPUT_DIR, { recursive: true });
@@ -41,54 +49,63 @@ const context = await browser.newContext({
 
 const page = await context.newPage();
 
-// ─── 1. Shows home ────────────────────────────────────────────────────────────
-console.log("→ Shows home");
-await page.goto(`${BASE_URL}/shows`);
+// ─── 1. Shows home — nav badge tour ──────────────────────────────────────────
+console.log("→ Shows home (tour: nav badge)");
+await page.goto(`${BASE_URL}/shows?tour=1`);
 await page.waitForLoadState("networkidle");
-await sleep(2500);
+await sleep(1200);
 
-// Scroll slowly to show the list
-await smoothScroll(page, 600);
+await waitForTour(page);
+
+// Brief pause on shows page after tour
 await sleep(1500);
-await smoothScroll(page, -600);
-await sleep(1000);
 
 // ─── 2. Settlements audit queue ───────────────────────────────────────────────
-console.log("→ Settlements queue");
-await page.click('a[href="/settlements"]');
+console.log("→ Settlements queue (tour: queue + cards)");
+await page.goto(`${BASE_URL}/settlements?tour=1`);
 await page.waitForLoadState("networkidle");
-await sleep(2500);
-
-// Scroll to reveal first few cards
-await smoothScroll(page, 400);
 await sleep(1200);
-await smoothScroll(page, 400);
-await sleep(1200);
-await smoothScroll(page, -800);
-await sleep(1000);
 
-// ─── 3. View full settlement (rose variant — clean mismatch) ──────────────────
+// Scroll gently while tour runs so cards are visible
+await smoothScroll(page, 300);
+await sleep(800);
+
+await waitForTour(page);
+await sleep(1500);
+
+// ─── 3. Settle page — rose banner (clean mismatch) ───────────────────────────
 console.log("→ Settle page — rose banner");
 const viewLinks = page.locator('a:has-text("View full settlement")');
-await viewLinks.first().click();
-await page.waitForLoadState("networkidle");
-await sleep(2500);
+const firstHref = await viewLinks.first().getAttribute("href").catch(() => null);
 
-// Scroll to show banner + lifecycle bar
-await smoothScroll(page, 300);
-await sleep(2000);
-await smoothScroll(page, -300);
-await sleep(800);
+if (firstHref) {
+  await page.goto(`${BASE_URL}${firstHref}?tour=1`);
+} else {
+  // fallback: find first flagged show from queue
+  await page.goto(`${BASE_URL}/settlements`);
+  await page.waitForLoadState("networkidle");
+  const href = await page.locator('a:has-text("View full settlement")').first().getAttribute("href");
+  await page.goto(`${BASE_URL}${href}?tour=1`);
+}
 
-// ─── 4. Back to queue — show amber variant ────────────────────────────────────
-console.log("→ Settle page — amber banner (later note conflict)");
-await page.goto(`${BASE_URL}/shows/show_0007/settle`);
 await page.waitForLoadState("networkidle");
-await sleep(2500);
-await smoothScroll(page, 300);
-await sleep(2000);
-await smoothScroll(page, -300);
-await sleep(800);
+await sleep(1200);
+await smoothScroll(page, 200);
+await sleep(600);
+
+await waitForTour(page);
+await sleep(1500);
+
+// ─── 4. Settle page — amber banner (later note conflict) ─────────────────────
+console.log("→ Settle page — amber banner (show_0007)");
+await page.goto(`${BASE_URL}/shows/show_0007/settle?tour=1`);
+await page.waitForLoadState("networkidle");
+await sleep(1200);
+await smoothScroll(page, 200);
+await sleep(600);
+
+await waitForTour(page);
+await sleep(1500);
 
 // ─── 5. Back to queue — resolve one ──────────────────────────────────────────
 console.log("→ Mark Resolved");
@@ -96,19 +113,17 @@ await page.goto(`${BASE_URL}/settlements`);
 await page.waitForLoadState("networkidle");
 await sleep(2000);
 
-// Highlight the button region by scrolling to it
 const firstResolveBtn = page.getByRole("button", { name: "Mark Resolved" }).first();
 await firstResolveBtn.scrollIntoViewIfNeeded();
 await sleep(1500);
 
-// Click and wait for revalidation
 await firstResolveBtn.click();
 await page.waitForLoadState("networkidle");
 await sleep(2500);
 
-// Show the updated badge and reduced queue
+// Show updated badge + reduced queue
 await smoothScroll(page, 200);
-await sleep(1500);
+await sleep(1200);
 await smoothScroll(page, -200);
 await sleep(1500);
 
