@@ -30,7 +30,7 @@ The downstream costs are real:
 
 <table style="width:100%;table-layout:fixed;"><tr>
 <td style="width:50%;padding-right:8px;vertical-align:top;"><img src="public/screenshots/01-shows-home.png" style="display:block;width:100%;height:260px;object-fit:cover;object-position:top;"/><br/><sub>Shows home — Mariana's default view. The Settlements nav item with badge is the new entry point.</sub></td>
-<td style="width:50%;padding-left:8px;vertical-align:top;"><img src="public/screenshots/05-nav-badge.png" style="display:block;width:100%;height:260px;object-fit:cover;object-position:top;"/><br/><sub>Sidebar badge — queue depth visible at a glance, no navigation required.</sub></td>
+<td style="width:50%;padding-left:8px;vertical-align:top;"><img src="public/screenshots/05-nav-badge.png" width="100%" style="display:block;width:100%;height:260px;object-fit:cover;object-position:top;"/><br/><sub>Sidebar badge — queue depth visible at a glance, no navigation required.</sub></td>
 </tr></table>
 
 ---
