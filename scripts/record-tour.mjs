@@ -97,8 +97,8 @@ await waitForTour(page);
 await sleep(1500);
 
 // ─── 4. Settle page — amber banner (later note conflict) ─────────────────────
-console.log("→ Settle page — amber banner (show_0007)");
-await page.goto(`${BASE_URL}/shows/show_0007/settle?tour=1`);
+console.log("→ Settle page — amber banner (show_0008 / Dust Off)");
+await page.goto(`${BASE_URL}/shows/show_0008/settle?tour=1`);
 await page.waitForLoadState("networkidle");
 await sleep(1200);
 await smoothScroll(page, 200);

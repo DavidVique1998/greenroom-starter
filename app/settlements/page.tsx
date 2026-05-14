@@ -13,7 +13,7 @@ export default async function SettlementsPage({
   searchParams?: Promise<{ tour?: string }>;
 }) {
   const sp = searchParams ? await searchParams : {};
-  const tourPage = sp?.tour === "resolved" ? "settlements-resolved" : "settlements";
+  const tourPage = (sp?.tour === "resolved" || sp?.tour === "manual-resolved") ? "settlements-resolved" : "settlements";
   const flagged = await getFlaggedSettlements();
 
   return (

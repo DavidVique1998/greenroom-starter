@@ -47,37 +47,37 @@ const STEPS: Record<TourPage, { element: string; title: string; description: str
   "settle-rose": [
     {
       element: "[data-tour='integrity-banner']",
-      title: "Inline signal banner",
-      description: "Appears above the lifecycle bar — before the numbers. Mariana catches it without knowing the audit page exists.",
+      title: "Signal mismatch — Wax Paper",
+      description: "Signoff says \"ok wire monday\" — that's approval. Status still shows Disputed. This payment is blocked for no reason.",
     },
     {
       element: "[data-tour='banner-reason']",
-      title: "Clear mismatch",
-      description: "Status says Disputed. Signoff reads as approval. Same \"Mark Resolved\" action — same server action, same revalidation.",
+      title: "One click unblocks payment",
+      description: "\"Mark Resolved\" advances to finalized and logs a timestamp. No spreadsheet, no thread-hunting, no 2am follow-up.",
     },
   ],
   "settle-amber": [
     {
       element: "[data-tour='integrity-banner']",
-      title: "Later-note conflict",
-      description: "Signoff was positive, but a note added afterward flags a dispute. Amber = verify which is current before resolving.",
+      title: "Later-note conflict — Dust Off",
+      description: "TM signed off: \"Looks good — TM.\" But a note added Monday flags the production-overage line. Amber = verify which is current.",
     },
     {
       element: "[data-tour='banner-reason']",
-      title: "Needs manual verification",
-      description: "System surfaces the conflict; Mariana makes the call. No automated action happens without her.",
+      title: "System surfaces the conflict",
+      description: "Mariana sees both signals at once — the approval and the question. She decides, not the system. No automated action happens without her.",
     },
   ],
   "settlements-resolved": [
     {
       element: "[data-tour='queue-header']",
-      title: "Settlement removed from queue",
-      description: "That settlement is now finalized. Status updated, timestamp logged — payment can proceed.",
+      title: "Wax Paper removed from queue",
+      description: "Status is now finalized. Timestamp logged. Payment can proceed — no thread to re-read, no manual push required.",
     },
     {
       element: "[data-tour='settlements-nav']",
       title: "Badge decrements automatically",
-      description: "The count drops on every resolve. When the queue hits zero, the badge disappears entirely — Mariana sees it without navigating.",
+      description: "The count drops on every resolve. When the queue hits zero, the badge disappears — Mariana sees it without navigating.",
     },
   ],
 };
@@ -118,7 +118,7 @@ export function TourOverlay({ page }: { page: TourPage }) {
     const steps = STEPS[page];
     if (!steps?.length) return;
 
-    const isManual = tourParam === "manual";
+    const isManual = tourParam === "manual" || tourParam === "manual-resolved";
 
     const driverObj = driver({
       animate: true,
