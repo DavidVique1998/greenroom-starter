@@ -92,7 +92,18 @@ export function TourOverlay({ page }: { page: TourPage }) {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const tourParam = searchParams.get("tour");
+    const urlParam = searchParams.get("tour");
+
+    // ?tour=off clears the session
+    if (urlParam === "off") {
+      sessionStorage.removeItem("greenroom-tour");
+      return;
+    }
+    // Persist mode so nav clicks carry it forward automatically
+    if (urlParam) {
+      sessionStorage.setItem("greenroom-tour", urlParam);
+    }
+    const tourParam = urlParam ?? sessionStorage.getItem("greenroom-tour");
     if (!tourParam) return;
 
     const steps = STEPS[page];
