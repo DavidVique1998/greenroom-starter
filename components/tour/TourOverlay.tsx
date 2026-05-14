@@ -92,20 +92,29 @@ export function TourOverlay({ page }: { page: TourPage }) {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (!searchParams.get("tour")) return;
+    const tourParam = searchParams.get("tour");
+    if (!tourParam) return;
 
     const steps = STEPS[page];
     if (!steps?.length) return;
 
+    const isManual = tourParam === "manual";
+
     const driverObj = driver({
       animate: true,
       smoothScroll: true,
-      showProgress: false,
-      showButtons: [],
+      showProgress: isManual,
+      showButtons: isManual ? ["next", "previous", "close"] : [],
+      nextBtnText: "Next →",
+      prevBtnText: "← Back",
       overlayOpacity: 0.55,
       stagePadding: 8,
       stageRadius: 6,
       popoverClass: "greenroom-tour-popover",
+      onDestroyStarted: () => {
+        driverObj.destroy();
+        window.__tourDone = true;
+      },
       steps: steps.map((s) => ({
         element: s.element,
         popover: {
@@ -117,23 +126,23 @@ export function TourOverlay({ page }: { page: TourPage }) {
       })),
     });
 
-    let currentStep = 0;
-
-    function advanceOrFinish() {
-      if (currentStep < steps.length - 1) {
-        currentStep++;
-        driverObj.moveTo(currentStep);
-        setTimeout(advanceOrFinish, STEP_DURATION);
-      } else {
-        driverObj.destroy();
-        window.__tourDone = true;
-      }
-    }
-
-    // Small delay so page elements are painted
     const startTimer = setTimeout(() => {
       driverObj.drive();
-      setTimeout(advanceOrFinish, STEP_DURATION);
+
+      if (!isManual) {
+        let currentStep = 0;
+        function advanceOrFinish() {
+          if (currentStep < steps.length - 1) {
+            currentStep++;
+            driverObj.moveTo(currentStep);
+            setTimeout(advanceOrFinish, STEP_DURATION);
+          } else {
+            driverObj.destroy();
+            window.__tourDone = true;
+          }
+        }
+        setTimeout(advanceOrFinish, STEP_DURATION);
+      }
     }, 800);
 
     return () => {
