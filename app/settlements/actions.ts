@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { settlements } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export async function resolveSettlement(formData: FormData) {
@@ -12,7 +12,7 @@ export async function resolveSettlement(formData: FormData) {
 
   await db
     .update(settlements)
-    .set({ status: "finalized", finalizedAt: new Date(), disputedAt: null })
+    .set({ status: "finalized", finalizedAt: new Date(), disputedAt: sql`NULL` })
     .where(eq(settlements.id, settlementId));
 
   revalidatePath("/", "layout");
