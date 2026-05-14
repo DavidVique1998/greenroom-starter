@@ -17,6 +17,7 @@ import {
   type Recoup,
 } from "@/db/schema";
 import { desc, asc, eq, sql, lte } from "drizzle-orm";
+import { detectMismatch } from "./signalScore";
 
 function todayDateString(): string {
   const d = new Date();
@@ -230,3 +231,33 @@ export async function getReports() {
 }
 
 export type Reports = Awaited<ReturnType<typeof getReports>>;
+
+export async function getFlaggedSettlements() {
+  const rows = await db
+    .select({
+      settlement: settlements,
+      show: shows,
+      artist: artists,
+    })
+    .from(settlements)
+    .innerJoin(shows, eq(settlements.showId, shows.id))
+    .leftJoin(artists, eq(shows.artistId, artists.id))
+    .where(eq(settlements.status, "disputed"))
+    .orderBy(desc(shows.date));
+
+  type Row = { settlement: typeof settlements.$inferSelect; show: typeof shows.$inferSelect; artist: typeof artists.$inferSelect | null };
+  return (rows as Row[])
+    .map((row) => ({
+      ...row,
+      mismatch: detectMismatch(
+        row.settlement.status,
+        row.settlement.signoffText,
+        row.settlement.notes,
+      ),
+    }))
+    .filter((row) => row.mismatch.flagged);
+}
+
+export type FlaggedSettlement = Awaited<
+  ReturnType<typeof getFlaggedSettlements>
+>[number];

@@ -2,16 +2,17 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Calendar, Users, BarChart3 } from "lucide-react";
+import { Calendar, Users, BarChart3, FileCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const items = [
   { href: "/shows", label: "Shows", icon: Calendar },
   { href: "/artists", label: "Artists", icon: Users },
   { href: "/reports", label: "Reports", icon: BarChart3 },
+  { href: "/settlements", label: "Settlements", icon: FileCheck },
 ];
 
-export function NavLinks() {
+export function NavLinks({ flaggedSettlements = 0 }: { flaggedSettlements?: number }) {
   const pathname = usePathname();
 
   return (
@@ -20,6 +21,7 @@ export function NavLinks() {
         const Icon = item.icon;
         const active =
           pathname === item.href || pathname.startsWith(item.href + "/");
+        const showBadge = item.href === "/settlements" && flaggedSettlements > 0;
         return (
           <Link
             key={item.href}
@@ -37,7 +39,12 @@ export function NavLinks() {
                 active ? "text-brand-700" : "text-ink-400",
               )}
             />
-            {item.label}
+            <span className="flex-1">{item.label}</span>
+            {showBadge && (
+              <span className="inline-flex items-center justify-center h-4 min-w-[16px] px-1 rounded-full bg-amber-500 text-white text-[10px] font-semibold leading-none">
+                {flaggedSettlements}
+              </span>
+            )}
           </Link>
         );
       })}

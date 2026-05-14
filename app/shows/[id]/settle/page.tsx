@@ -11,6 +11,7 @@ import {
   XCircle,
   Wallet,
   TrendingUp,
+  Sparkles,
 } from "lucide-react";
 import { getShowById } from "@/lib/queries";
 import {
@@ -28,6 +29,8 @@ import {
   formatShowDateFull,
 } from "@/lib/format";
 import type { Settlement, Recoup } from "@/db/schema";
+import { detectMismatch } from "@/lib/signalScore";
+import { resolveSettlement } from "@/app/settlements/actions";
 import { Logomark } from "@/components/brand/logo";
 
 const RECOUP_LABELS: Record<Recoup["category"], string> = {
@@ -77,6 +80,9 @@ export default async function SettlePage({
   const disputedRecoups = recoups.filter((r) => r.status === "disputed");
   const isDisputed = settlement?.status === "disputed" || settlement?.status === "revised" || !!settlement?.disputedAt;
   const disputedRecoupValue = disputedRecoups.reduce((s, r) => s + r.amount, 0);
+  const mismatch = settlement
+    ? detectMismatch(settlement.status, settlement.signoffText, settlement.notes)
+    : null;
 
   return (
     <div className={`px-12 py-10 max-w-7xl ${isDisputed ? "bg-gradient-to-b from-rose-50/30 via-canvas to-canvas" : ""}`}>
@@ -118,6 +124,39 @@ export default async function SettlePage({
             <p className="text-[12.5px] text-ink-600 mt-1 leading-relaxed">
               The artist team has flagged recoup line items. This settlement cannot be finalized until the dispute is resolved.
             </p>
+          </div>
+        </div>
+      )}
+
+      {mismatch?.flagged && settlement && (
+        <div className="mb-6 rounded-lg border border-amber-200/60 bg-amber-50/50 p-5 flex gap-3">
+          <Sparkles className="h-4 w-4 text-amber-700 mt-0.5 shrink-0" />
+          <div className="flex-1 min-w-0">
+            <div className="text-[13px] font-semibold text-amber-900 mb-1">
+              Signal mismatch detected
+            </div>
+            <p className="text-[12.5px] text-ink-600 leading-relaxed">
+              {mismatch.reason}
+            </p>
+            <div className="mt-3 flex items-center gap-3">
+              <form action={resolveSettlement}>
+                <input type="hidden" name="settlementId" value={settlement.id} />
+                <input type="hidden" name="showId" value={show.id} />
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-ink-900 px-3 py-1.5 text-[11.5px] font-medium text-white hover:bg-ink-700 transition-colors"
+                >
+                  <Check className="h-3 w-3" />
+                  Mark Resolved
+                </button>
+              </form>
+              <Link
+                href="/settlements"
+                className="text-[11.5px] text-brand-700 hover:underline"
+              >
+                View all flagged settlements
+              </Link>
+            </div>
           </div>
         </div>
       )}

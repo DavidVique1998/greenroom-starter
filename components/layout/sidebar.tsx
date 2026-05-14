@@ -2,8 +2,10 @@ import Link from "next/link";
 import { BookOpen, Lightbulb } from "lucide-react";
 import { Logomark } from "@/components/brand/logo";
 import { NavLinks } from "./nav-links";
+import { getFlaggedSettlements } from "@/lib/queries";
 
-export function Sidebar() {
+export async function Sidebar() {
+  const flaggedCount = (await getFlaggedSettlements()).length;
   return (
     <aside className="w-[248px] shrink-0 border-r border-ink-200/60 bg-canvas-soft flex flex-col sticky top-0 h-screen overflow-y-auto z-10">
       <div className="px-5 pt-6 pb-5">
@@ -24,7 +26,7 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 px-2.5 space-y-0.5">
-        <NavLinks />
+        <NavLinks flaggedSettlements={flaggedCount} />
       </nav>
 
       <div className="mx-3 mb-3 rounded-lg border border-brand-200/40 bg-brand-50/30 p-3">
