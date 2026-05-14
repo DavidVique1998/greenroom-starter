@@ -12,7 +12,7 @@ export async function resolveSettlement(formData: FormData) {
 
   await db
     .update(settlements)
-    .set({ status: "finalized", finalizedAt: new Date() })
+    .set({ status: "finalized", finalizedAt: new Date(), disputedAt: null })
     .where(eq(settlements.id, settlementId));
 
   revalidatePath("/", "layout");
