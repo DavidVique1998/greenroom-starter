@@ -90,9 +90,12 @@ export default async function SettlePage({
     ? detectMismatch(settlement.status, settlement.signoffText, settlement.notes)
     : null;
 
-  const tourPage: "settle-amber" | "settle-rose" = mismatch?.flagged && mismatch.reason.includes("later note")
-    ? "settle-amber"
-    : "settle-rose";
+  const tourPage: "settle-amber" | "settle-rose" | "settle-finalized" =
+    settlement?.status === "finalized"
+      ? "settle-finalized"
+      : mismatch?.flagged && mismatch.reason.includes("later note")
+        ? "settle-amber"
+        : "settle-rose";
 
   return (
     <div className={`px-12 py-10 max-w-7xl ${isDisputed ? "bg-gradient-to-b from-rose-50/30 via-canvas to-canvas" : ""}`}>
@@ -329,7 +332,7 @@ function LifecycleBar({
     settlement.status === "revised";
 
   return (
-    <Card>
+    <Card data-tour="lifecycle-bar">
       <CardContent className="py-5">
         <div className="flex items-center justify-between mb-4">
           <div className="eyebrow text-[10px] text-ink-400">
@@ -378,6 +381,7 @@ function LifecycleBar({
               <div
                 key={stage.key}
                 className="flex flex-col items-center text-center"
+                {...(isCurrent && settlement.status === "finalized" ? { "data-tour": "lifecycle-finalized" } : {})}
               >
                 <div
                   className={`relative z-10 w-7 h-7 rounded-full ring-2 flex items-center justify-center ${stageDot}`}

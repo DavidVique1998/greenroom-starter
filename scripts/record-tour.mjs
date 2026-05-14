@@ -120,6 +120,10 @@ await sleep(1200);
 
 // ─── 6. Click "Mark Resolved" ────────────────────────────────────────────────
 console.log("→ Mark Resolved");
+// Capture the first card's show link before resolving
+const firstCardLink = page.locator('a:has-text("View full settlement")').first();
+const resolvedHref = await firstCardLink.getAttribute("href").catch(() => null);
+
 const firstResolveBtn = page.getByRole("button", { name: "Mark Resolved" }).first();
 await firstResolveBtn.scrollIntoViewIfNeeded();
 await sleep(1000);
@@ -133,6 +137,20 @@ console.log("→ Post-resolve tour (queue shrinks, badge decrements)");
 await page.goto(`${BASE_URL}/settlements?tour=resolved`);
 await page.waitForLoadState("networkidle");
 await sleep(1000);
+
+await waitForTour(page);
+await sleep(1500);
+
+// ─── 8. Finalized settle page — clean lifecycle ───────────────────────────────
+console.log("→ Finalized settle page — clean lifecycle");
+const finalizedUrl = resolvedHref
+  ? `${BASE_URL}${resolvedHref}?tour=1`
+  : `${BASE_URL}/shows/show_0142/settle?tour=1`;
+await page.goto(finalizedUrl);
+await page.waitForLoadState("networkidle");
+await sleep(1200);
+await smoothScroll(page, 150);
+await sleep(600);
 
 await waitForTour(page);
 await sleep(1500);

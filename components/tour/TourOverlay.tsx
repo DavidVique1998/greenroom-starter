@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 
-export type TourPage = "shows" | "settlements" | "settle-rose" | "settle-amber" | "settlements-resolved";
+export type TourPage = "shows" | "settlements" | "settle-rose" | "settle-amber" | "settlements-resolved" | "settle-finalized";
 
 const STEP_DURATION = 3800;
 
@@ -78,6 +78,18 @@ const STEPS: Record<TourPage, { element: string; title: string; description: str
       element: "[data-tour='settlements-nav']",
       title: "Badge decrements automatically",
       description: "The count drops on every resolve. When the queue hits zero, the badge disappears — Mariana sees it without navigating.",
+    },
+  ],
+  "settle-finalized": [
+    {
+      element: "[data-tour='lifecycle-bar']",
+      title: "Clean lifecycle — no dispute flag",
+      description: "Status is finalized. The rose banner is gone. No 'In dispute' label, no gradient — just a clean path from draft to finalized.",
+    },
+    {
+      element: "[data-tour='lifecycle-finalized']",
+      title: "Finalized — payment unblocked",
+      description: "Timestamp logged at the moment Mariana clicked Mark Resolved. The Paid step is next — Mariana can wire from here with no further friction.",
     },
   ],
 };

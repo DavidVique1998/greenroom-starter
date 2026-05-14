@@ -102,6 +102,8 @@ Empty state is a positive signal: "No mismatches detected." Mariana can glance a
 <td width="50%"><img src="public/screenshots/04-settle-amber-banner.png" width="100%"/><br/><sub>Amber banner — signoff positive but a later note flags a dispute. Needs manual verification.</sub></td>
 </tr></table>
 
+<img src="public/screenshots/07-settle-finalized.png" width="100%"/><br/><sub>After "Mark Resolved" — rose banner gone, lifecycle bar shows Finalized with timestamp. Clean path from draft to finalized, no dispute flag. The Driver.js tour highlights the lifecycle bar and the finalized step.</sub>
+
 When Mariana navigates directly to a disputed settlement's detail page, the integrity banner appears above the lifecycle bar — before the numbers, not buried at the bottom. She doesn't have to know the audit page exists to catch it.
 
 The banner surfaces the same reason text and the same "Mark Resolved" action. Both surfaces use the same server action; revalidation hits both `/settlements` and the specific show's settle page.
