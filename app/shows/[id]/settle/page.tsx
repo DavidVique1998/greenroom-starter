@@ -84,7 +84,7 @@ export default async function SettlePage({
     .reduce((sum, e) => sum + e.amount, 0);
 
   const disputedRecoups = recoups.filter((r) => r.status === "disputed");
-  const isDisputed = settlement?.status === "disputed" || settlement?.status === "revised" || !!settlement?.disputedAt;
+  const isDisputed = settlement?.status === "disputed" || settlement?.status === "revised";
   const disputedRecoupValue = disputedRecoups.reduce((s, r) => s + r.amount, 0);
   const mismatch = settlement
     ? detectMismatch(settlement.status, settlement.signoffText, settlement.notes)
@@ -326,8 +326,7 @@ function LifecycleBar({
 
   const isDisputed =
     settlement.status === "disputed" ||
-    settlement.status === "revised" ||
-    !!settlement.disputedAt;
+    settlement.status === "revised";
 
   return (
     <Card>
