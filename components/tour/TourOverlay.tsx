@@ -88,23 +88,32 @@ declare global {
   }
 }
 
+// Module-level: persists across re-mounts within the same tab session
+const completedPages = new Set<string>();
+
 export function TourOverlay({ page }: { page: TourPage }) {
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const urlParam = searchParams.get("tour");
 
-    // ?tour=off clears the session
+    // ?tour=off clears everything
     if (urlParam === "off") {
       sessionStorage.removeItem("greenroom-tour");
+      completedPages.clear();
       return;
     }
     // Persist mode so nav clicks carry it forward automatically
     if (urlParam) {
       sessionStorage.setItem("greenroom-tour", urlParam);
+      // Explicit URL param = user wants to re-run this page
+      completedPages.delete(page);
     }
     const tourParam = urlParam ?? sessionStorage.getItem("greenroom-tour");
     if (!tourParam) return;
+
+    // Already toured this page in this tab session — skip
+    if (completedPages.has(page)) return;
 
     const steps = STEPS[page];
     if (!steps?.length) return;
@@ -124,6 +133,7 @@ export function TourOverlay({ page }: { page: TourPage }) {
       popoverClass: "greenroom-tour-popover",
       onDestroyStarted: () => {
         driverObj.destroy();
+        completedPages.add(page);
         window.__tourDone = true;
       },
       steps: steps.map((s) => ({
@@ -149,6 +159,7 @@ export function TourOverlay({ page }: { page: TourPage }) {
             setTimeout(advanceOrFinish, STEP_DURATION);
           } else {
             driverObj.destroy();
+            completedPages.add(page);
             window.__tourDone = true;
           }
         }
