@@ -187,4 +187,6 @@ Build passes clean. No external dependencies added. Works with `npm run dev`, no
 <td style="width:50%;padding-left:8px;vertical-align:top;"><img src="public/screenshots/04-settle-amber-banner.png" style="width:100%;"/><br/><sub><strong>Fig. 6</strong> — Amber banner. Signoff positive but a later note flags a dispute.</sub></td>
 </tr></table>
 
-<img src="public/screenshots/07-settle-finalized.png" style="width:100%;"/><br/><sub><strong>Fig. 7</strong> — After "Mark Resolved." Rose banner gone, lifecycle bar shows Finalized with timestamp.</sub>
+<table style="width:100%;table-layout:fixed;"><tr>
+<td style="width:100%;vertical-align:top;"><img src="public/screenshots/07-settle-finalized.png" style="width:100%;"/><br/><sub><strong>Fig. 7</strong> — After "Mark Resolved." Rose banner gone, lifecycle bar shows Finalized with timestamp.</sub></td>
+</tr></table>
