@@ -4,8 +4,6 @@
 
 **Demo:** [Watch on Loom](https://www.loom.com/share/881f7372f3a8432884a5958bbfccc890) · **Repo:** [davidalmeida1/greenroom-starter](https://github.com/davidalmeida1/greenroom-starter)
 
-[![Watch the demo](https://cdn.loom.com/sessions/thumbnails/881f7372f3a8432884a5958bbfccc890-with-play.gif)](https://www.loom.com/share/881f7372f3a8432884a5958bbfccc890)
-
 ---
 
 ## Context
