@@ -10,6 +10,20 @@ This is the starter codebase for the Greenroom Applied AI PM case study.
 
 ---
 
+## My Submission — Settlement Signal Integrity
+
+**Candidate:** David Almeida · **May 2026**
+
+82% of Greenroom customers run settlements in spreadsheets. This feature fixes the root cause hiding in plain sight: settlements stuck in `disputed` status that the artist already approved. A heuristic classifier detects signoff/status mismatches and surfaces them in a one-click audit queue — no API key, no external dependencies, no automated action without Mariana's sign-off.
+
+| | |
+|---|---|
+| **PRD Memo** | [PRD_MEMO.md](./PRD_MEMO.md) · [PDF](./PRD_MEMO.pdf) |
+| **Demo** | [Watch on Loom](https://www.loom.com/share/881f7372f3a8432884a5958bbfccc890) |
+| **Branch** | `feat/signal-integrity` |
+
+---
+
 You're looking at a working but mediocre product. It's enough to feel real, but every workflow has gaps. **Your job isn't to fix everything — it's to pick a slice and design it well.** See your case study brief for full instructions.
 
 ## Before you start
