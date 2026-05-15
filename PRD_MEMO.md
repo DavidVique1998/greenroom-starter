@@ -30,10 +30,7 @@ The downstream costs are real:
 - **Cognitive overhead.** Mariana has to re-context-switch into a settlement she mentally closed weeks ago.
 - **Audit confusion.** A `disputed` status that reads as resolved in the signoff creates ambiguity for Marcus and Pri when they look at the numbers.
 
-<table style="width:100%;table-layout:fixed;"><tr>
-<td style="width:50%;padding-right:8px;vertical-align:top;"><img src="public/screenshots/01-shows-home.png" style="display:block;width:100%;height:260px;object-fit:cover;object-position:top;"/><br/><sub>Shows home — Mariana's default view. The Settlements nav item with badge is the new entry point.</sub></td>
-<td style="width:50%;padding-left:8px;vertical-align:top;"><img src="public/screenshots/05-nav-badge.png" width="100%" style="display:block;width:100%;height:260px;object-fit:cover;object-position:top;"/><br/><sub>Sidebar badge — queue depth visible at a glance, no navigation required.</sub></td>
-</tr></table>
+*(See Appendix — Fig. 1: Shows home · Fig. 2: Sidebar badge)*
 
 ---
 
@@ -92,19 +89,11 @@ The page was intentionally kept simple. No filters, no sorting, no bulk actions.
 
 Empty state is a positive signal: "No mismatches detected." Mariana can glance at the nav badge, see zero, and move on.
 
-<table><tr>
-<td width="50%"><img src="public/screenshots/02-settlements-queue-top.png" width="100%"/><br/><sub>Audit queue — verbatim signoff, flag reason, and one-click resolve per card.</sub></td>
-<td width="50%"><img src="public/screenshots/06-after-resolve.png" width="100%"/><br/><sub>After "Mark Resolved" — Sunday Drivers removed, nav badge decrements via revalidatePath.</sub></td>
-</tr></table>
+*(See Appendix — Fig. 3: Audit queue · Fig. 4: After resolve)*
 
 ### 3. Inline Banner on Settlement Pages
 
-<table><tr>
-<td width="50%"><img src="public/screenshots/03-settle-inline-banner.png" width="100%"/><br/><sub>Rose banner — status says Disputed, signoff reads as approval. Resolve without leaving the page.</sub></td>
-<td width="50%"><img src="public/screenshots/04-settle-amber-banner.png" width="100%"/><br/><sub>Amber banner — signoff positive but a later note flags a dispute. Needs manual verification.</sub></td>
-</tr></table>
-
-<img src="public/screenshots/07-settle-finalized.png" width="100%"/><br/><sub>After "Mark Resolved" — rose banner gone, lifecycle bar shows Finalized with timestamp. Clean path from draft to finalized, no dispute flag. The Driver.js tour highlights the lifecycle bar and the finalized step.</sub>
+*(See Appendix — Fig. 5: Rose banner · Fig. 6: Amber banner · Fig. 7: Finalized state)*
 
 When Mariana navigates directly to a disputed settlement's detail page, the integrity banner appears above the lifecycle bar — before the numbers, not buried at the bottom. She doesn't have to know the audit page exists to catch it.
 
@@ -178,3 +167,24 @@ The Settlements nav item shows an amber count badge when flagged settlements exi
 | `components/layout/sidebar.tsx` | Made async, fetches flagged count, passes to nav |
 
 Build passes clean. No external dependencies added. Works with `npm run dev`, no API keys required.
+
+---
+
+## Appendix: Screenshots
+
+<table style="width:100%;table-layout:fixed;"><tr>
+<td style="width:50%;padding-right:8px;vertical-align:top;"><img src="public/screenshots/01-shows-home.png" style="width:100%;"/><br/><sub><strong>Fig. 1</strong> — Shows home. The Settlements nav item with badge is the new entry point.</sub></td>
+<td style="width:50%;padding-left:8px;vertical-align:top;"><img src="public/screenshots/05-nav-badge.png" style="width:100%;"/><br/><sub><strong>Fig. 2</strong> — Sidebar badge. Queue depth visible at a glance, no navigation required.</sub></td>
+</tr></table>
+
+<table style="width:100%;table-layout:fixed;"><tr>
+<td style="width:50%;padding-right:8px;vertical-align:top;"><img src="public/screenshots/02-settlements-queue-top.png" style="width:100%;"/><br/><sub><strong>Fig. 3</strong> — Audit queue. Verbatim signoff, flag reason, and one-click resolve per card.</sub></td>
+<td style="width:50%;padding-left:8px;vertical-align:top;"><img src="public/screenshots/06-after-resolve.png" style="width:100%;"/><br/><sub><strong>Fig. 4</strong> — After "Mark Resolved." Sunday Drivers removed, nav badge decrements.</sub></td>
+</tr></table>
+
+<table style="width:100%;table-layout:fixed;"><tr>
+<td style="width:50%;padding-right:8px;vertical-align:top;"><img src="public/screenshots/03-settle-inline-banner.png" style="width:100%;"/><br/><sub><strong>Fig. 5</strong> — Rose banner. Status says Disputed, signoff reads as approval.</sub></td>
+<td style="width:50%;padding-left:8px;vertical-align:top;"><img src="public/screenshots/04-settle-amber-banner.png" style="width:100%;"/><br/><sub><strong>Fig. 6</strong> — Amber banner. Signoff positive but a later note flags a dispute.</sub></td>
+</tr></table>
+
+<img src="public/screenshots/07-settle-finalized.png" style="width:100%;"/><br/><sub><strong>Fig. 7</strong> — After "Mark Resolved." Rose banner gone, lifecycle bar shows Finalized with timestamp.</sub>
